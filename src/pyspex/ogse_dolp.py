@@ -7,6 +7,10 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Defines the spectral dependent DolP of the Moxtek polarizer.
+"""
+__all__ = ['gsfc_polarizer']
 
 import numpy as np
 import xarray as xr

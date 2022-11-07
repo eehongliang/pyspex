@@ -8,7 +8,16 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Add OGSE information of a OCAL measurement to a SPEXone L1A product.
 
+Possible OGSE information::
+
+ * reference diode (Ambient/GSFC polarized, radiometric): the reference diode
+ is located in the ... or Grande (GSFC) integrated sphere.
+ * wavelength monitor (Ambient/GSFC polarized, radiometric, wavelength).
+ * wavelength of OPO laser (GSFC spectral-radiometry).
+"""
 import argparse
 from pathlib import Path
 
@@ -112,8 +121,8 @@ def main():
     parser_db.set_defaults(func=create_ogse_db)
 
     parser_wr = subparsers.add_parser('add',
-                                       help=("add OGSE information"
-                                             " to a SPEXone Level-1A product"))
+                                      help=("add OGSE information"
+                                            " to a SPEXone Level-1A product"))
     parser_wr.add_argument('--ref_diode', action='store_true',
                            help='add reference-diode data from OGSE database')
     parser_wr.add_argument('--avantes', action='store_true',

@@ -7,6 +7,11 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Read characteristics of the OPO laser used at NASA GSFC for the ISRF and
+Straylight measurements.
+"""
+__all__ = ['read_gse_excel']
 
 from pathlib import Path
 
@@ -15,7 +20,7 @@ from openpyxl import load_workbook
 import xarray as xr
 
 
-# - local functions ----------------------------
+# - main functions ----------------------------
 def read_gse_excel(gse_dir: Path, target_cwl: str) -> xr.Dataset:
     """
     Return GSE info on central wavelength, line-width and laser radiance
@@ -34,14 +39,14 @@ def read_gse_excel(gse_dir: Path, target_cwl: str) -> xr.Dataset:
     indx = np.argmin(np.abs(actual_cwl - float(target_cwl[:-2])))
     print(f'{target_cwl:>8s}: {actual_cwl[indx]:.3f} at index={indx:d}')
     if abs(float(target_cwl[:-2]) - actual_cwl[indx]) > 2:
-        print('*** WARNING: no GSE information found')
+        print('[WARNING]: no GSE information found')
         wbook.close()
         return None
 
     indx += 1
     wavelength = np.array([wsheet['E'][indx].value])
     xar_wv = xr.DataArray(wavelength,
-                          coords={'wavelength':wavelength },
+                          coords={'wavelength': wavelength},
                           attrs={'long_name': 'central wavelength',
                                  'units': 'nm'})
     xar_std = xr.DataArray([wsheet['F'][indx].value],
@@ -66,7 +71,7 @@ def read_gse_excel(gse_dir: Path, target_cwl: str) -> xr.Dataset:
 def __test(l1a_file: str) -> None:
     """Small function to test this module.
     """
-    # Create a netCDF4 file with the Helios data in it
+    # Create a netCDF4 file with the ISRF data in it
     gse_dir = Path('/data/richardh/SPEXone/GSFC')
     xds = read_gse_excel(gse_dir, '465.4nm')
     xds = read_gse_excel(gse_dir, '360nm', )

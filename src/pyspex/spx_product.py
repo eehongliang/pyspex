@@ -7,6 +7,10 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Generate file-name of the SPEXone Level-1A products.
+"""
+__all__ = ['prod_name']
 
 from datetime import datetime
 

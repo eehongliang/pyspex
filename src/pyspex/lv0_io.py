@@ -7,6 +7,23 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Contains a collection of routines to read and write SPEXone CCSDS data:
+
+   `dtype_packet_hdr`, `dtype_tmtc`, `dump_lv0_data`, `read_lv0_data`,
+   `select_lv0_data`, `write_lv0_data`
+
+And handy routines to convert CCSDS parameters:
+
+   `ap_id`, `coverage_time`, `fix_sub_sec`, `grouping_flag`, `hk_sec_of_day`,
+   `img_sec_of_day`, `nomhk_timestamps`, `packet_length`,
+   `science_timestamps`, `sequence`
+"""
+__all__ = ['ap_id', 'coverage_time', 'fix_sub_sec', 'grouping_flag',
+           'hk_sec_of_day', 'img_sec_of_day', 'nomhk_timestamps',
+           'packet_length', 'science_timestamps', 'sequence',
+           'dtype_packet_hdr', 'dtype_tmtc', 'dump_lv0_data', 'read_lv0_data',
+           'select_lv0_data', 'write_lv0_data']
 
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -222,7 +239,7 @@ def _fix_hk24_(sci_hk):
 
     In addition:
 
-    - copy the first 4 bytes of DET_CHENA to DET_ILVDS
+    - copy the first 4 bytes of 'DET_CHENA' to 'DET_ILVDS'
     - parameter 'REG_BINNING_TABLE_START' was writen in little-endian
 
     """
@@ -281,7 +298,7 @@ def read_lv0_data(file_list: list, file_format: str, debug=False,
         buff_hk = ()
         with open(flname, 'rb') as fp:
             if verbose:
-                print('[INFO] processing file: ', flname)
+                print(f'[INFO]: processing file "{flname}"')
             offs = 0
             ccsds_data = fp.read()
 
@@ -301,10 +318,10 @@ def read_lv0_data(file_list: list, file_format: str, debug=False,
                 ])
                 cfe_hdr = np.frombuffer(ccsds_data, count=1, offset=offs,
                                         dtype=cfe_dtype)[0]
+                if verbose:
+                    print(f'[INFO]: read cFE File header "{cfe_hdr}"')
                 # Now we can check the values of the cFE File header
                 # or even write these values to the L1A product
-                if verbose:
-                    print('[INFO] cFE File header: ', cfe_hdr)
                 offs += cfe_dtype.itemsize
 
             # read CCSDS header and user data
@@ -360,8 +377,8 @@ def read_lv0_data(file_list: list, file_format: str, debug=False,
         del ccsds_data
 
     if verbose:
-        print(f'[INFO] number of Science packages: {len(ccsds_sci)}')
-        print(f'[INFO] number of Engineering packages: {len(ccsds_hk)}')
+        print(f'[INFO]: number of Science packages {len(ccsds_sci)}')
+        print(f'[INFO]: number of Engineering packages {len(ccsds_hk)}')
 
     return ccsds_sci, ccsds_hk
 
@@ -483,7 +500,7 @@ def select_lv0_data(select: str, ccsds_sci, ccsds_hk, verbose=False) -> tuple:
     science = np.concatenate(science)
     mps_list = np.unique(science['hk']['MPS_ID']).tolist()
     if verbose:
-        print(f'[INFO] list of unique MPS {mps_list}')
+        print(f'[INFO]: list of unique MPS {mps_list}')
 
     if ccsds_hk:
         nomhk = np.concatenate(

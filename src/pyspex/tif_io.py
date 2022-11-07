@@ -7,6 +7,10 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Contains the class `TIFio` to read simulated SPEXone measurements.
+"""
+__all__ = ['TIFio']
 
 from pathlib import Path
 
@@ -135,7 +139,8 @@ if FOUND_PYTIFF:
                 if n_frame is None:
                     n_frame = 1 + (data.max() // 0xFFFF)
                 elif n_frame < 1 + (data.max() // 0xFFFF):
-                    print('Warning: n_frame too small - precision will be lost')
+                    print('[WARNING]: n_frame too small'
+                          ' - precision will be lost')
 
                 if n_frame == 1:
                     return data.astype('u2')

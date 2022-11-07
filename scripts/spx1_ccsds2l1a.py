@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
+# This file is part of pyspex
+#
+# https://github.com/rmvanhees/pyspex.git
+#
+# Copyright (c) 2019-2022 SRON - Netherlands Institute for Space Research
+#    All Rights Reserved
+#
+# License:  BSD-3-Clause
 """
-This file is part of pyspex
-
-https://github.com/rmvanhees/pyspex.git
-
-Python implementation to convert SPEXone OCAL measurement data to L1A format
-
-Copyright (c) 2019-2022 SRON - Netherlands Institute for Space Research
-   All Rights Reserved
-
-License:  BSD-3-Clause
+Python implementation to convert SPEXone OCAL measurement data to L1A format.
 """
 import argparse
 
@@ -119,7 +118,7 @@ def main():
             continue
 
         mps_length = max(mps_sz, mps_length)
-        if not mps_id in mps_list:
+        if mps_id not in mps_list:
             mps_list.append(mps_id)
         num_packets += 1
     if args.verbose:

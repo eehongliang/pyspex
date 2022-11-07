@@ -7,6 +7,10 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Defines the format of a SPEXone Level-1A product.
+"""
+__all__ = ['init_l1a']
 
 import datetime
 import numpy as np

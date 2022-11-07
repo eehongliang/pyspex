@@ -7,6 +7,10 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Defines the Helios spectrum, used at SRON.
+"""
+__all__ = ['helios_spectrum']
 
 import numpy as np
 import xarray as xr

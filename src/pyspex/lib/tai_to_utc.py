@@ -7,6 +7,10 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Contains the class `Clocks` to convert TAI and UTC timestamps.
+"""
+__all__ = ['Clocks']
 
 from datetime import datetime
 
@@ -18,7 +22,7 @@ EPOCH_1958 = datetime.fromisoformat("1958-01-01T00+00:00").timestamp()
 # - class Clocks -------------------------
 class Clocks:
     """
-    Convert TAI (epoch 1958) to UTC (epoch 1970)or visa versa
+    Convert TAI (epoch 1958) to UTC (epoch 1970) or visa versa
 
     Notes
     -----
@@ -148,7 +152,7 @@ class Clocks:
             if res[0] != dt_str.timestamp():
                 raise ValueError(f'Detected error in table at epoch={res[0]}')
 
-        print('[INFO] current information on leap seconds expires'
+        print('[INFO]: current information on leap seconds expires'
               f' at {self.table[-1][2]}')
 
 

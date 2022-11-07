@@ -7,6 +7,11 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+Contains the class `LV1gse` which checks EGSE/OGSE data and/or writes it to
+a SPEXone Level-1A product.
+"""
+__all__ = ['LV1gse']
 
 import numpy as np
 
@@ -15,8 +20,7 @@ from netCDF4 import Dataset
 
 # --------------------------------------------------
 class LV1gse:
-    """
-    Python class add EGSE/OGSE data to a SPEXone Level-1A product.
+    """Adds EGSE/OGSE data to a SPEXone Level-1A product.
 
     Parameters
     ----------
@@ -114,17 +118,17 @@ class LV1gse:
             if fmt[0] == np.uint8:
                 res_sanity = (egse_data[key] == egse_data[key][0]).all()
                 if not res_sanity:
-                    print('[WARNING] ', key, egse_data[key])
+                    print(f'[WARNING]: {key}={egse_data[key]}')
 
         act_angle = self.fid['/gse_data'].ACT_rotationAngle
         if np.isfinite(act_angle):
             if not np.allclose(egse_data['ACT_ANGLE'], act_angle, 1e-2):
-                print('[WARNING] ', 'ACT_ANGLE', egse_data['ACT_ANGLE'])
+                print(f'[WARNING]: ACT_ANGLE={egse_data["ACT_ANGLE"]}')
 
         alt_angle = self.fid['/gse_data'].ALT_rotationAngle
         if np.isfinite(alt_angle):
             if not np.allclose(egse_data['ALT_ANGLE'], alt_angle, 1e-2):
-                print('[WARNING] ', 'ALT_ANGLE', egse_data['ALT_ANGLE'])
+                print(f'[WARNING]: ALT_ANGLE={egse_data["ALT_ANGLE"]}')
 
     def set_attr(self, name: str, value) -> None:
         """Add attribute to group 'gse_data'.

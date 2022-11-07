@@ -7,6 +7,14 @@
 #    All Rights Reserved
 #
 # License:  BSD-3-Clause
+"""
+This module contain routines to read reference diode measurements and
+wavelength monitor data. These data are supposed to be written to a HDF5
+database. From which collocated data can be added to a SPEXone Level-1A
+product.
+"""
+__all__ = ['read_ref_diode', 'read_wav_mon',
+           'add_ogse_ref_diode', 'add_ogse_wav_mon']
 
 from datetime import datetime
 from io import StringIO
@@ -22,7 +30,7 @@ from xarray import DataArray, Dataset, open_dataset
 # ---------- CREATE OGSE DATABASES ----------
 def read_ref_diode(ogse_dir: Path, file_list: list, verbose=False) -> Dataset:
     """
-    Read reference diode data to numpy compound array
+    Read reference diode data into a xarray.Dataset.
     (input: comma separated values)
     """
     data = None
@@ -107,7 +115,7 @@ def read_ref_diode(ogse_dir: Path, file_list: list, verbose=False) -> Dataset:
 # ---------------
 def read_wav_mon(ogse_dir: Path, file_list: list, verbose=False) -> Dataset:
     """
-    Read wavelength monitor data to numpy compound array
+    Read wavelength monitor data into a xarray.Dataset.
     (input comma separated values)
     """
     def byte_to_timestamp(str_date: str) -> datetime:
@@ -246,11 +254,13 @@ def clock_offset(l1a_file: Path) -> float:
     """
     # determine duration of the measurement (ITOS clock)
     with h5py.File(l1a_file, 'r') as fid:
+        # pylint: disable=unsubscriptable-object
         res = fid.attrs['input_files']
         if isinstance(res, bytes):
             input_file = Path(res.decode('ascii')).stem.rstrip('_hk')
         else:
             input_file = Path(res[0]).stem.rstrip('_hk')
+        # pylint: disable=no-member
         msmt_start = np.datetime64(
             fid.attrs['time_coverage_start'].decode('ascii').split('+')[0])
         msmt_stop = np.datetime64(
@@ -289,7 +299,7 @@ def add_ogse_ref_diode(ref_db: Path, l1a_file: Path) -> None:
     if indx.size == 0:
         print('ReferenceDiode',
               ref_time.min(), msmt_start, msmt_stop, ref_time.max())
-        print('[Warning] no reference-diode data found')
+        print('[WARNING]: no reference-diode data found')
         return
 
     # update Level-1A product with OGSE/EGSE information
@@ -312,7 +322,7 @@ def add_ogse_wav_mon(ref_db: Path, l1a_file: Path) -> None:
     if mask.sum() == 0:
         print('WaveMonitor',
               ref_time.min(), msmt_start, msmt_stop, ref_time.max())
-        print('[Warning] no wavelength monitoring data found')
+        print('[WARNING]: no wavelength monitoring data found')
         return
 
     # update Level-1A product with OGSE/EGSE information
